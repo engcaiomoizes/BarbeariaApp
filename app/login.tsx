@@ -1,5 +1,6 @@
 import { Controller, useForm } from 'react-hook-form';
-import { Alert, Button, Image, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { FaGoogle } from "react-icons/fa";
+import { Alert, Image, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 type FormData = {
     email: string;
@@ -23,7 +24,7 @@ export default function Login() {
                 <Text className="uppercase font-bold text-lg">Fazer Login</Text>
                 <View className="flex flex-col gap-2 w-full">
                     <View className="flex flex-col gap-1">
-                        <Text>E-mail</Text>
+                        <Text className="font-medium">E-mail</Text>
                         <Controller
                             control={control}
                             name="email"
@@ -31,7 +32,7 @@ export default function Login() {
                             render={({ field: { onChange, onBlur, value } }) => (
                                 <TextInput
                                     className="bg-gray-100 px-4 py-3 rounded outline-none border border-gray-100 focus:border-[#1d69aa] transition ease-in-out duration-150"
-                                    placeholder="E-mail"
+                                    placeholder="Digite seu e-mail"
                                     keyboardType="email-address"
                                     onBlur={onBlur}
                                     onChangeText={onChange}
@@ -42,8 +43,8 @@ export default function Login() {
                         {errors.email && <Text className="text-red-600 font-medium">{errors.email.message}</Text>}
                     </View>
 
-                    <View className="flex flex-col gap-1 mb-3">
-                        <Text>Senha</Text>
+                    <View className="flex flex-col gap-1">
+                        <Text className="font-medium">Senha</Text>
                         <Controller
                             control={control}
                             name="password"
@@ -51,7 +52,7 @@ export default function Login() {
                             render={({ field: { onChange, onBlur, value } }) => (
                             <TextInput
                                 className="bg-gray-100 px-4 py-3 rounded outline-none border border-gray-100 focus:border-[#1d69aa] transition ease-in-out duration-150"
-                                placeholder="Senha"
+                                placeholder="Digite sua senha"
                                 secureTextEntry
                                 onBlur={onBlur}
                                 onChangeText={onChange}
@@ -59,13 +60,19 @@ export default function Login() {
                             />
                             )}
                         />
+                        <Text className="text-end text-blue-600 font-medium underline">Esqueci minha senha</Text>
                         {errors.password && <Text className="text-red-600 font-medium">{errors.password.message}</Text>}
                     </View>
 
-                    <Button color="#1d69aa" title="Entrar" onPress={handleSubmit(onSubmit)} />
-                    <TouchableOpacity className="bg-gray-100 p-4 border rounded">
-                        <Text className="text-red-600 bg-green-600">Entrar com Google</Text>
-                    </TouchableOpacity>
+                    <View className="mt-3 flex flex-col items-center gap-2">
+                        <TouchableOpacity className="bg-[#1d69aa] p-2 rounded w-full" onPress={handleSubmit(onSubmit)}>
+                            <Text className="uppercase text-white font-medium flex justify-center items-center">Entrar</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity className="bg-[#eb4034] p-2 rounded w-full">
+                            <Text className="uppercase text-white font-medium flex justify-center items-center gap-2"><FaGoogle className="size-5" />Entrar com Google</Text>
+                        </TouchableOpacity>
+                        <Text className="uppercase font-medium underline mt-2">Criar conta</Text>
+                    </View>
                 </View>
             </View>
         </View>
