@@ -1,50 +1,40 @@
-# Welcome to your Expo app 👋
+# 💈 Barbearia App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Aplicativo de agendamento para barbearia, desenvolvido com **React Native + Expo**, com foco em aplicar a metodologia ágil **Kanban** e fortalecer conhecimentos em **desenvolvimento mobile** com **Firebase**.
 
-## Get started
+---
 
-1. Install dependencies
+## 📱 Tecnologias Utilizadas
 
-   ```bash
-   npm install
-   ```
+- [React Native](https://reactnative.dev/)
+- [Expo](https://expo.dev/)
+- [Firebase Authentication](https://firebase.google.com/products/auth)
+- [Cloud Firestore](https://firebase.google.com/products/firestore)
+- [Trello (Kanban)](https://trello.com)
 
-2. Start the app
+---
 
-   ```bash
-   npx expo start
-   ```
+## 🎯 Objetivos do Projeto
 
-In the output, you'll find options to open the app in a
+- Aplicar a **metodologia Kanban** para gerenciar o desenvolvimento de forma visual e organizada.
+- Desenvolver uma aplicação real e funcional voltada para barbearias.
+- Integrar autenticação de usuários e gerenciamento de agendamentos com Firebase.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+---
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## ✅ Funcionalidades (em desenvolvimento)
 
-## Get a fresh project
+- [x] Tela de login com e-mail/senha e Google
+- [x] Tela de splash
+- [ ] Tela de cadastro de usuário
+- [ ] Agendamento de horários
+- [ ] Cancelamento de agendamentos
+- [ ] Painel do administrador (mobile)
+- [ ] Plataforma web para administração
 
-When you're ready, run:
+---
 
-```bash
-npm run reset-project
-```
+## 📊 Organização com Kanban
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Este projeto é gerenciado com base na metodologia ágil **Kanban**, utilizando um quadro no Trello para organizar tarefas em Backlog, A fazer, Em andamento, Em testes e Concluídas.
+A ideia é garantir um **fluxo contínuo de desenvolvimento**, melhorando a produtividade e o foco.
