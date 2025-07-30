@@ -1,5 +1,5 @@
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Controller, useForm } from 'react-hook-form';
-import { FaGoogle } from "react-icons/fa";
 import { Alert, Image, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 type FormData = {
@@ -21,10 +21,10 @@ export default function Login() {
         <View className="flex-1 justify-center items-center">
             <Image style={{ width: 300, height: 200 }} source={require('../assets/images/logo.png')} />
             <View className="px-6 py-4 bg-white rounded-lg flex flex-col items-center gap-4 w-[90%] shadow">
-                <Text className="uppercase font-bold text-lg">Fazer Login</Text>
+                <Text className="uppercase font-black web:font-bold text-lg">Fazer Login</Text>
                 <View className="flex flex-col gap-2 w-full">
                     <View className="flex flex-col gap-1">
-                        <Text className="font-medium">E-mail</Text>
+                        <Text className="font-semibold">E-mail</Text>
                         <Controller
                             control={control}
                             name="email"
@@ -44,7 +44,7 @@ export default function Login() {
                     </View>
 
                     <View className="flex flex-col gap-1">
-                        <Text className="font-medium">Senha</Text>
+                        <Text className="font-semibold">Senha</Text>
                         <Controller
                             control={control}
                             name="password"
@@ -60,16 +60,17 @@ export default function Login() {
                             />
                             )}
                         />
-                        <Text className="text-end text-blue-600 font-medium underline">Esqueci minha senha</Text>
+                        <Text className="text-right text-blue-600 font-medium underline">Esqueci minha senha</Text>
                         {errors.password && <Text className="text-red-600 font-medium">{errors.password.message}</Text>}
                     </View>
 
                     <View className="mt-3 flex flex-col items-center gap-2">
-                        <TouchableOpacity className="bg-[#1d69aa] p-2 rounded w-full" onPress={handleSubmit(onSubmit)}>
-                            <Text className="uppercase text-white font-medium flex justify-center items-center">Entrar</Text>
+                        <TouchableOpacity className="bg-[#1d69aa] p-2 rounded w-full flex flex-row justify-center items-center" onPress={handleSubmit(onSubmit)}>
+                            <Text className="uppercase text-white font-medium">Entrar</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity className="bg-[#eb4034] p-2 rounded w-full">
-                            <Text className="uppercase text-white font-medium flex justify-center items-center gap-2"><FaGoogle className="size-5" />Entrar com Google</Text>
+                        <TouchableOpacity className="bg-[#eb4034] p-2 rounded w-full flex flex-row justify-center items-center gap-2">
+                            <FontAwesome name="google" size={20} color="white" />
+                            <Text className="uppercase text-white font-medium">Entrar com Google</Text>
                         </TouchableOpacity>
                         <Text className="uppercase font-medium underline mt-2">Criar conta</Text>
                     </View>
