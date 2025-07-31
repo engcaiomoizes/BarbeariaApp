@@ -1,3 +1,6 @@
+import { registerUser } from '@/services/registerUser';
+import AntDesign from '@expo/vector-icons/AntDesign';
+import { router } from 'expo-router';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Alert, Image, Text, TextInput, TouchableOpacity, View } from "react-native";
@@ -14,13 +17,23 @@ type FormData = {
 };
 
 export default function Cadastro() {
+    const [loading, setLoading] = useState(false);
+
     const {
         control,
         handleSubmit,
         formState: { errors },
     } = useForm<FormData>();
-    const onSubmit = (data: FormData) => {
-        Alert.alert('Cadastro Info', `Nome: ${data.nome}\nTelefone: ${data.telefone}\nEmail: ${data.email}\nSenha: ${data.password}`);
+    const onSubmit = async (data: FormData) => {
+        try {
+            setLoading(true);
+            await registerUser(data.email, data.password, data.nome, data.telefone);
+            router.replace('/login');
+        } catch (err) {
+            Alert.alert("Ocorreu um erro inesperado.");
+        } finally {
+            setLoading(false);
+        }
     };
 
     const [inputMaskSelected, setInputMaskSelected] = useState(false);
@@ -181,8 +194,15 @@ export default function Cadastro() {
                     </View>
 
                     <View className="mt-3 flex flex-col items-center gap-2">
-                        <TouchableOpacity className="bg-[#1d69aa] p-2 rounded w-full flex flex-row justify-center items-center" onPress={handleSubmit(onSubmit)}>
-                            <Text className="uppercase text-white font-medium">Cadastrar</Text>
+                        <TouchableOpacity disabled={loading} className="bg-[#1d69aa] p-2 rounded w-full flex flex-row justify-center items-center" onPress={handleSubmit(onSubmit)}>
+                            <Text className={`uppercase text-white font-medium ${loading ? 'animate-spin' : ''}`}>
+                                {
+                                    loading ?
+                                    <AntDesign name="loading1" size={16} color="white" />
+                                    :
+                                    'Cadastrar'
+                                }
+                            </Text>
                         </TouchableOpacity>
                     </View>
                 </View>

@@ -1,5 +1,7 @@
+import { loginUser } from "@/services/loginUser";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { router } from "expo-router";
+import { useState } from "react";
 import { Controller, useForm } from 'react-hook-form';
 import { Alert, Image, Text, TextInput, TouchableOpacity, View } from "react-native";
 
@@ -9,13 +11,24 @@ type FormData = {
 };
 
 export default function Login() {
+    const [loading, setLoading] = useState(false);
+
     const {
         control,
         handleSubmit,
         formState: { errors },
     } = useForm<FormData>();
-    const onSubmit = (data: FormData) => {
-        Alert.alert('Login Info', `Email: ${data.email}\nSenha: ${data.password}`);
+    const onSubmit = async (data: FormData) => {
+        try {
+            setLoading(true);
+            const result = await loginUser(data.email, data.password);
+            console.log(result);
+            router.replace('/');
+        } catch (err: any) {
+            Alert.alert("E-mail e/ou senha incorreto.");
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -66,7 +79,7 @@ export default function Login() {
                             />
                             )}
                         />
-                        <Text className="text-right text-blue-600 font-medium underline">Esqueci minha senha</Text>
+                        <Text className="text-right text-blue-600 font-medium underline" onPress={() => router.push('/forgot-password')}>Esqueci minha senha</Text>
                     </View>
 
                     <View className="mt-3 flex flex-col items-center gap-2">
