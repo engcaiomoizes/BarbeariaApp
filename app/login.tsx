@@ -1,4 +1,5 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { router } from "expo-router";
 import { Controller, useForm } from 'react-hook-form';
 import { Alert, Image, Text, TextInput, TouchableOpacity, View } from "react-native";
 
@@ -24,7 +25,10 @@ export default function Login() {
                 <Text className="uppercase font-black web:font-bold text-lg">Fazer Login</Text>
                 <View className="flex flex-col gap-2 w-full">
                     <View className="flex flex-col gap-1">
-                        <Text className="font-semibold">E-mail</Text>
+                        <View className="flex flex-row gap-2">
+                            <Text className="font-semibold">E-mail</Text>
+                            {errors.email && <Text className="text-red-600 font-medium">{errors.email.message}</Text>}
+                        </View>
                         <Controller
                             control={control}
                             name="email"
@@ -40,11 +44,13 @@ export default function Login() {
                                 />
                             )}
                         />
-                        {errors.email && <Text className="text-red-600 font-medium">{errors.email.message}</Text>}
                     </View>
 
                     <View className="flex flex-col gap-1">
-                        <Text className="font-semibold">Senha</Text>
+                        <View className="flex flex-row gap-2">
+                            <Text className="font-semibold">Senha</Text>
+                            {errors.password && <Text className="text-red-600 font-medium">{errors.password.message}</Text>}
+                        </View>
                         <Controller
                             control={control}
                             name="password"
@@ -61,7 +67,6 @@ export default function Login() {
                             )}
                         />
                         <Text className="text-right text-blue-600 font-medium underline">Esqueci minha senha</Text>
-                        {errors.password && <Text className="text-red-600 font-medium">{errors.password.message}</Text>}
                     </View>
 
                     <View className="mt-3 flex flex-col items-center gap-2">
@@ -72,7 +77,7 @@ export default function Login() {
                             <FontAwesome name="google" size={20} color="white" />
                             <Text className="uppercase text-white font-medium">Entrar com Google</Text>
                         </TouchableOpacity>
-                        <Text className="uppercase font-medium underline mt-2">Criar conta</Text>
+                        <Text className="uppercase font-medium underline mt-2" onPress={() => router.push('/cadastro')}>Criar conta</Text>
                     </View>
                 </View>
             </View>
