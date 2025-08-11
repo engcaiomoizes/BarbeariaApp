@@ -3,17 +3,25 @@ import { Stack } from "expo-router";
 import '../global.css';
 
 export default function RootLayout() {
-  const { isLoggedIn } = useAuth();
+  const { user, loading } = useAuth();
 
   return (
     <Stack screenOptions={{ headerShown: false }}>
-      {/* Rotas públicas */}
-      <Stack.Screen name="login" />
-      <Stack.Screen name="cadastro" />
-      <Stack.Screen name="forgot-password" />
-
-      {/* Rotas protegidas */}
-      
+      {
+        user ? (
+          <>
+            {/* Rotas protegidas */}
+            <Stack.Screen name="home" />
+          </>
+        ) : (
+          <>
+            {/* Rotas públicas */}
+            <Stack.Screen name="login" />
+            <Stack.Screen name="cadastro" />
+            <Stack.Screen name="forgot-password" />
+          </>
+        )
+      }
     </Stack>
   );
 }

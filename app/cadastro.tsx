@@ -28,7 +28,7 @@ export default function Cadastro() {
         try {
             setLoading(true);
             await registerUser(data.email, data.password, data.nome, data.telefone);
-            router.replace('/login');
+            router.replace('/');
         } catch (err) {
             Alert.alert("Ocorreu um erro inesperado.");
         } finally {
