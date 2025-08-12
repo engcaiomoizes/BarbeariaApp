@@ -28,7 +28,7 @@ export default function Cadastro() {
         try {
             setLoading(true);
             await registerUser(data.email, data.password, data.nome, data.telefone);
-            router.replace('/');
+            router.replace('/(auth)/login');
         } catch (err) {
             Alert.alert("Ocorreu um erro inesperado.");
         } finally {
@@ -40,7 +40,7 @@ export default function Cadastro() {
 
     return (
         <View className="flex pt-10 justify-center items-center">
-            <Image style={{ width: 300, height: 200 }} source={require('../assets/images/logo.png')} />
+            <Image style={{ width: 300, height: 200 }} source={require('../../assets/images/logo.png')} />
             <View className="px-6 py-4 bg-white rounded-lg flex flex-col items-center gap-4 w-[90%] shadow">
                 <Text className="uppercase font-black web:font-bold text-lg">Cadastre-se</Text>
                 <View className="flex flex-col gap-2 w-full">

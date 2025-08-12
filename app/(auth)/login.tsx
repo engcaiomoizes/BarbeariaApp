@@ -24,7 +24,7 @@ export default function Login() {
             setLoading(true);
             const result = await loginUser(data.email, data.password);
             console.log(result);
-            router.replace('/home');
+            router.replace('/(tabs)/home');
         } catch (err: any) {
             Alert.alert("E-mail e/ou senha incorreto.");
         } finally {
@@ -34,7 +34,7 @@ export default function Login() {
 
     return (
         <View className="flex-1 justify-center items-center">
-            <Image style={{ width: 300, height: 200 }} source={require('../assets/images/logo.png')} />
+            <Image style={{ width: 300, height: 200 }} source={require('../../assets/images/logo.png')} />
             <View className="px-6 py-4 bg-white rounded-lg flex flex-col items-center gap-4 w-[90%] shadow">
                 <Text className="uppercase font-black web:font-bold text-lg">Fazer Login</Text>
                 <View className="flex flex-col gap-2 w-full">
@@ -80,7 +80,7 @@ export default function Login() {
                             />
                             )}
                         />
-                        <Text className="text-right text-blue-600 font-medium underline" onPress={() => router.push('/forgot-password')}>Esqueci minha senha</Text>
+                        <Text className="text-right text-blue-600 font-medium underline" onPress={() => router.push('/(auth)/forgot-password')}>Esqueci minha senha</Text>
                     </View>
 
                     <View className="mt-3 flex flex-col items-center gap-2">
@@ -98,7 +98,7 @@ export default function Login() {
                             <FontAwesome name="google" size={20} color="white" />
                             <Text className="uppercase text-white font-medium">Entrar com Google</Text>
                         </TouchableOpacity>
-                        <Text className="uppercase font-medium underline mt-2" onPress={() => router.push('/cadastro')}>Criar conta</Text>
+                        <Text className="uppercase font-medium underline mt-2" onPress={() => router.push('/(auth)/cadastro')}>Criar conta</Text>
                     </View>
                 </View>
             </View>

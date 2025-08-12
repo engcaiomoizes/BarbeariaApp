@@ -1,27 +1,24 @@
 import { useAuth } from "@/hooks/useAuth";
-import { Stack } from "expo-router";
+import { Stack, useRouter, useSegments } from "expo-router";
+import { useEffect } from "react";
 import '../global.css';
 
 export default function RootLayout() {
   const { user, loading } = useAuth();
+  const router = useRouter();
+  const segments = useSegments();
 
-  return (
-    <Stack screenOptions={{ headerShown: false }}>
-      {
-        user ? (
-          <>
-            {/* Rotas protegidas */}
-            <Stack.Screen name="home" />
-          </>
-        ) : (
-          <>
-            {/* Rotas públicas */}
-            <Stack.Screen name="login" />
-            <Stack.Screen name="cadastro" />
-            <Stack.Screen name="forgot-password" />
-          </>
-        )
-      }
-    </Stack>
-  );
+  useEffect(() => {
+    if (loading) return;
+
+    const inAuthGroup = segments[0] === "(auth)";
+
+    if (!user && !inAuthGroup) {
+      router.replace("/(auth)/login");
+    } else if (user && inAuthGroup) {
+      router.replace("/(tabs)/home");
+    }
+  }, [user, loading, segments]);
+
+  return <Stack screenOptions={{ headerShown: false }} />;
 }

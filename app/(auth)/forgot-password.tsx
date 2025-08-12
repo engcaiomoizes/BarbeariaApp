@@ -14,7 +14,7 @@ export default function ForgotPassword() {
 
     return (
         <View className="flex pt-10 justify-center items-center">
-            <Image style={{ width: 300, height: 200 }} source={require('../assets/images/logo.png')} />
+            <Image style={{ width: 300, height: 200 }} source={require('../../assets/images/logo.png')} />
             {
                 email == "" ?
                 <ForgotPasswordEmail onSend={(em) => setEmail(em)} />
