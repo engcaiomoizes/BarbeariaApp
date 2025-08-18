@@ -2,10 +2,9 @@ import { registerUser } from '@/services/registerUser';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { Control, Controller, FieldValues, Path, RegisterOptions, useForm } from 'react-hook-form';
 import { Alert, Image, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { TextInputMask } from "react-native-masked-text";
-import tw from "tailwind-react-native-classnames";
 
 type FormData = {
     nome: string;
@@ -23,6 +22,7 @@ export default function Cadastro() {
         control,
         handleSubmit,
         formState: { errors },
+        getValues,
     } = useForm<FormData>();
     const onSubmit = async (data: FormData) => {
         try {
@@ -40,173 +40,208 @@ export default function Cadastro() {
 
     return (
         <View className="flex pt-10 justify-center items-center">
-            <Image style={{ width: 300, height: 200 }} source={require('../../assets/images/logo.png')} />
-            <View className="px-6 py-4 bg-white rounded-lg flex flex-col items-center gap-4 w-[90%] shadow">
-                <Text className="uppercase font-black web:font-bold text-lg">Cadastre-se</Text>
-                <View className="flex flex-col gap-2 w-full">
+      <Image style={{ width: 300, height: 200 }} source={require('../../assets/images/logo.png')} />
 
-                    <View className="flex flex-col gap-1">
-                        <View className="flex flex-row gap-2">
-                            <Text className="font-semibold">Nome completo</Text>
-                            {errors.nome && <Text className="text-red-600 font-medium">{errors.nome.message}</Text>}
-                        </View>
-                        <Controller
-                            control={control}
-                            name="nome"
-                            rules={{ required: 'Nome obrigatório', pattern: { value: /^[A-Za-zÀ-ÿ\s]+$/, message: 'Inválido. Use apenas letras.' } }}
-                            render={({ field: { onChange, onBlur, value } }) => (
-                                <TextInput
-                                    className="bg-gray-100 px-4 py-3 rounded outline-none border border-gray-100 focus:border-[#1d69aa] transition ease-in-out duration-150"
-                                    placeholder="Digite seu nome"
-                                    keyboardType="default"
-                                    onBlur={onBlur}
-                                    onChangeText={onChange}
-                                    value={value}
-                                />
-                            )}
-                        />
-                    </View>
+      <View
+        className="px-6 py-4 bg-white rounded-lg flex flex-col items-center gap-4 w-[90%]"
+        style={{
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 1 },
+          shadowOpacity: 0.1,
+          shadowRadius: 3,
+          elevation: 2,
+        }}
+      >
+        <Text className="uppercase font-black text-lg">Cadastre-se</Text>
 
-                    <View className="flex flex-col gap-1">
-                        <View className="flex flex-row gap-2">
-                            <Text className="font-semibold">Telefone</Text>
-                            {errors.telefone && <Text className="text-red-600 font-medium">{errors.telefone.message}</Text>}
-                        </View>
-                        <Controller
-                            control={control}
-                            name="telefone"
-                            rules={{ required: 'Telefone obrigatório', pattern: { value: /^\(\d{2}\)\s\d{5}-\d{4}$/, message: 'Formato de telefone inválido' } }}
-                            render={({ field: { onChange, onBlur, value } }) => (
-                                <TextInputMask
-                                    type="custom"
-                                    options={{
-                                        mask: "(99) 99999-9999",
-                                    }}
-                                    maxLength={15}
-                                    style={tw`bg-gray-100 px-4 py-3 rounded outline-none border ${inputMaskSelected ? 'outline-none border-[1d69aa]' : 'border-gray-100'} transition ease-in-out duration-150`}
-                                    selectionColor="#1d69aa"
-                                    onFocus={() => setInputMaskSelected(true)}
-                                    placeholder="Digite seu telefone"
-                                    keyboardType="phone-pad"
-                                    onBlur={() => {
-                                        onBlur();
-                                        setInputMaskSelected(false);
-                                    }}
-                                    onChangeText={onChange}
-                                    value={value}
-                                />
-                            )}
-                        />
-                    </View>
+        <View className="flex flex-col gap-2 w-full">
+          <FormField
+            label="Nome completo"
+            error={errors.nome?.message}
+            control={control}
+            name="nome"
+            placeholder="Digite seu nome"
+            rules={{
+              required: 'Nome obrigatório',
+              pattern: {
+                value: /^[A-Za-zÀ-ÿ\s]+$/,
+                message: 'Inválido. Use apenas letras.',
+              },
+            }}
+          />
 
-                    <View className="flex flex-col gap-1">
-                        <View className="flex flex-row gap-2">
-                            <Text className="font-semibold">E-mail</Text>
-                            {errors.email && <Text className="text-red-600 font-medium">{errors.email.message}</Text>}
-                        </View>
-                        <Controller
-                            control={control}
-                            name="email"
-                            rules={{ required: 'E-mail obrigatório', pattern: { value: /^\S+@\S+$/i, message: 'E-mail inválido' } }}
-                            render={({ field: { onChange, onBlur, value } }) => (
-                                <TextInput
-                                    className="bg-gray-100 px-4 py-3 rounded outline-none border border-gray-100 focus:border-[#1d69aa] transition ease-in-out duration-150"
-                                    placeholder="Digite seu e-mail"
-                                    keyboardType="email-address"
-                                    onBlur={onBlur}
-                                    onChangeText={onChange}
-                                    value={value}
-                                />
-                            )}
-                        />
-                    </View>
+          <View className="flex flex-col gap-1">
+            <LabelWithError label="Telefone" error={errors.telefone?.message} />
+            <Controller
+              control={control}
+              name="telefone"
+              rules={{
+                required: 'Telefone obrigatório',
+                pattern: {
+                  value: /^\(\d{2}\)\s\d{5}-\d{4}$/,
+                  message: 'Formato de telefone inválido',
+                },
+              }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInputMask
+                  type="custom"
+                  options={{ mask: '(99) 99999-9999' }}
+                  maxLength={15}
+                  style={{
+                    backgroundColor: '#f3f4f6',
+                    paddingHorizontal: 16,
+                    paddingVertical: 12,
+                    borderRadius: 8,
+                    borderWidth: 1,
+                    borderColor: inputMaskSelected ? '#1d69aa' : '#f3f4f6',
+                  }}
+                  selectionColor="#1d69aa"
+                  onFocus={() => setInputMaskSelected(true)}
+                  onBlur={() => {
+                    onBlur();
+                    setInputMaskSelected(false);
+                  }}
+                  onChangeText={onChange}
+                  value={value}
+                />
+              )}
+            />
+          </View>
 
-                    <View className="flex flex-col gap-1">
-                        <View className="flex flex-row gap-2">
-                            <Text className="font-semibold">Confirma E-mail</Text>
-                            {errors.confirmEmail && <Text className="text-red-600 font-medium">{errors.confirmEmail.message}</Text>}
-                        </View>
-                        <Controller
-                            control={control}
-                            name="confirmEmail"
-                            rules={{
-                                required: 'Confirmação obrigatória',
-                                validate: value => value === control._formValues.email || 'E-mails não coincidem',
-                            }}
-                            render={({ field: { onChange, onBlur, value } }) => (
-                                <TextInput
-                                    className="bg-gray-100 px-4 py-3 rounded outline-none border border-gray-100 focus:border-[#1d69aa] transition ease-in-out duration-150"
-                                    placeholder="Confirme seu e-mail"
-                                    keyboardType="email-address"
-                                    onBlur={onBlur}
-                                    onChangeText={onChange}
-                                    value={value}
-                                />
-                            )}
-                        />
-                    </View>
+          <FormField
+            label="E-mail"
+            error={errors.email?.message}
+            control={control}
+            name="email"
+            placeholder="Digite seu e-mail"
+            keyboardType="email-address"
+            rules={{
+              required: 'E-mail obrigatório',
+              pattern: {
+                value: /^\S+@\S+$/i,
+                message: 'E-mail inválido',
+              },
+            }}
+          />
 
-                    <View className="flex flex-col gap-1">
-                        <View className="flex flex-row gap-2">
-                            <Text className="font-semibold">Senha</Text>
-                            {errors.password && <Text className="text-red-600 font-medium">{errors.password.message}</Text>}
-                        </View>
-                        <Controller
-                            control={control}
-                            name="password"
-                            rules={{ required: 'Senha obrigatória', minLength: { value: 6, message: 'Mínimo de 6 caracteres' } }}
-                            render={({ field: { onChange, onBlur, value } }) => (
-                            <TextInput
-                                className="bg-gray-100 px-4 py-3 rounded outline-none border border-gray-100 focus:border-[#1d69aa] transition ease-in-out duration-150"
-                                placeholder="Digite sua senha"
-                                secureTextEntry
-                                onBlur={onBlur}
-                                onChangeText={onChange}
-                                value={value}
-                            />
-                            )}
-                        />
-                    </View>
+          <FormField
+            label="Confirma E-mail"
+            error={errors.confirmEmail?.message}
+            control={control}
+            name="confirmEmail"
+            placeholder="Confirme seu e-mail"
+            keyboardType="email-address"
+            rules={{
+              required: 'Confirmação obrigatória',
+              validate: (value) =>
+                value === getValues('email') || 'E-mails não coincidem',
+            }}
+          />
 
-                    <View className="flex flex-col gap-1">
-                        <View className="flex flex-row gap-2">
-                            <Text className="font-semibold">Confirma Senha</Text>
-                            {errors.confirmPassword && <Text className="text-red-600 font-medium">{errors.confirmPassword.message}</Text>}
-                        </View>
-                        <Controller
-                            control={control}
-                            name="confirmPassword"
-                            rules={{
-                                required: 'Confirmação obrigatória',
-                                validate: value => value === control._formValues.password || 'Senhas não coincidem',
-                            }}
-                            render={({ field: { onChange, onBlur, value } }) => (
-                            <TextInput
-                                className="bg-gray-100 px-4 py-3 rounded outline-none border border-gray-100 focus:border-[#1d69aa] transition ease-in-out duration-150"
-                                placeholder="Confirme sua senha"
-                                secureTextEntry
-                                onBlur={onBlur}
-                                onChangeText={onChange}
-                                value={value}
-                            />
-                            )}
-                        />
-                    </View>
+          <FormField
+            label="Senha"
+            error={errors.password?.message}
+            control={control}
+            name="password"
+            placeholder="Digite sua senha"
+            secureTextEntry
+            rules={{
+              required: 'Senha obrigatória',
+              minLength: { value: 6, message: 'Mínimo de 6 caracteres' },
+            }}
+          />
 
-                    <View className="mt-3 flex flex-col items-center gap-2">
-                        <TouchableOpacity disabled={loading} className="bg-[#1d69aa] p-2 rounded w-full flex flex-row justify-center items-center" onPress={handleSubmit(onSubmit)}>
-                            <Text className={`uppercase text-white font-medium ${loading ? 'animate-spin' : ''}`}>
-                                {
-                                    loading ?
-                                    <AntDesign name="loading1" size={16} color="white" />
-                                    :
-                                    'Cadastrar'
-                                }
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </View>
+          <FormField
+            label="Confirma Senha"
+            error={errors.confirmPassword?.message}
+            control={control}
+            name="confirmPassword"
+            placeholder="Confirme sua senha"
+            secureTextEntry
+            rules={{
+              required: 'Confirmação obrigatória',
+              validate: (value) =>
+                value === getValues('password') || 'Senhas não coincidem',
+            }}
+          />
+
+          <View className="mt-3 flex flex-col items-center gap-2 w-full">
+            <TouchableOpacity
+              disabled={loading}
+              className="bg-[#1d69aa] p-2 rounded flex flex-row justify-center items-center"
+              style={{ width: '100%' }}
+              onPress={handleSubmit(onSubmit)}
+            >
+              {loading ? (
+                <AntDesign name="loading1" size={16} color="white" />
+              ) : (
+                <Text className="uppercase text-white font-medium">Cadastrar</Text>
+              )}
+            </TouchableOpacity>
+          </View>
         </View>
+      </View>
+    </View>
     );
 }
+
+type LabelWithErrorProps = {
+  label: string;
+  error?: string;
+};
+
+export const LabelWithError = ({ label, error }: LabelWithErrorProps) => (
+  <View className="flex flex-row gap-2">
+    <Text className="font-semibold">{label}</Text>
+    {error && <Text className="text-red-600 font-medium">{error}</Text>}
+  </View>
+);
+
+type FormFieldProps<T extends FieldValues> = {
+  label: string;
+  error?: string;
+  control: Control<T>;
+  name: Path<T>;
+  placeholder: string;
+  keyboardType?: 'default' | 'email-address' | 'phone-pad';
+  secureTextEntry?: boolean;
+  rules?: Omit<RegisterOptions<T, Path<T>>, "valueAsNumber" | "valueAsDate" | "setValueAs" | "disabled">;
+};
+
+export const FormField = <T extends FieldValues>({
+  label,
+  error,
+  control,
+  name,
+  placeholder,
+  keyboardType = 'default',
+  secureTextEntry = false,
+  rules,
+}: FormFieldProps<T>) => (
+  <View className="flex flex-col gap-1">
+    <LabelWithError label={label} error={error} />
+    <Controller
+      control={control}
+      name={name}
+      rules={rules}
+      render={({ field: { onChange, onBlur, value } }) => (
+        <TextInput
+          placeholder={placeholder}
+          keyboardType={keyboardType}
+          secureTextEntry={secureTextEntry}
+          onBlur={onBlur}
+          onChangeText={onChange}
+          value={value}
+          style={{
+            backgroundColor: '#f3f4f6',
+            paddingHorizontal: 16,
+            paddingVertical: 12,
+            borderRadius: 8,
+            borderWidth: 1,
+            borderColor: '#f3f4f6',
+          }}
+        />
+      )}
+    />
+  </View>
+);
