@@ -1,5 +1,6 @@
 import { useAuth } from "@/hooks/AuthContext";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { Redirect, Tabs } from "expo-router";
 
 export default function TabsLayout() {
@@ -35,6 +36,17 @@ export default function TabsLayout() {
           title: "Perfil",
           tabBarIcon: ({ color, size }) => (
             <FontAwesome name="user" color={color} size={size} />
+          ),
+          headerShown: true,
+          headerTitle: "",
+        }}
+      />
+      <Tabs.Screen
+        name="my-barber"
+        options={{
+          title: "Minha Barbearia",
+          tabBarIcon: ({ color, size }) => (
+            <FontAwesome6 name="shop" color={color} size={size} />
           ),
           headerShown: true,
           headerTitle: "",
