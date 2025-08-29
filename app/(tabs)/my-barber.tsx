@@ -13,6 +13,11 @@ interface BarberData {
     horario: string;
 }
 
+interface Horario {
+    start: string;
+    end: string;
+}
+
 export default function MyBarber() {
     const params = useLocalSearchParams();
     const { barberData } = params;
@@ -20,21 +25,22 @@ export default function MyBarber() {
     const [loading, setLoading] = useState(false);
     const [editando, setEditando] = useState(false);
     const [horarios, setHorarios] = useState(false);
+    const [horarioList, setHorarioList] = useState<Record<string, Horario>>({});
 
     useEffect(() => {
         if (barberData && JSON.stringify(data) !== JSON.stringify(JSON.parse(barberData as string))) {
             const parsedData = JSON.parse(barberData as string);
             console.log(parsedData);
             setData(parsedData);
+
+            const horarioString = atob(parsedData.horario);
+            setHorarioList(JSON.parse(horarioString));
         }
     }, [params, data, barberData]);
 
     if (!data) {
         return <Text>Carregando...</Text>;
     }
-
-    const horarioString = atob(data.horario);
-    const horario = useState(JSON.parse(horarioString));
 
     const capitalizeFirstLetter = (str: string) => {
         if (!str) return str;
@@ -78,49 +84,14 @@ export default function MyBarber() {
                     </View>
                     <View className="flex flex-col gap-1 px-6">
                         {
-                            Object.keys(horario).map((day) => (
+                            Object.keys(horarioList).map((day) => (
                                 <View key={day} className="flex flex-row justify-between">
                                     <Text className="w-12">{capitalizeFirstLetter(day)}.</Text>
                                     <Text>----</Text>
-                                    <Text className="w-24" style={{ textAlign: 'right' }}>{horario[day].start && horario[day].end ? horario[day].start + ' às ' + horario[day].end : 'Fechado'}</Text>
+                                    <Text className="w-32" style={{ textAlign: 'right' }}>{horarioList[day].start && horarioList[day].end ? horarioList[day].start + ' às ' + horarioList[day].end : 'Fechado'}</Text>
                                 </View>
                             ))
                         }
-                        <View className="flex flex-row justify-between">
-                            <Text className="w-12">Dom.</Text>
-                            <Text>----</Text>
-                            <Text className="w-24" style={{ textAlign: 'right' }}>Fechado</Text>
-                        </View>
-                        <View className="flex flex-row justify-between">
-                            <Text className="w-12">Seg.</Text>
-                            <Text>----</Text>
-                            <Text className="w-24" style={{ textAlign: 'right' }}>09h às 17h</Text>
-                        </View>
-                        <View className="flex flex-row justify-between">
-                            <Text className="w-12">Ter.</Text>
-                            <Text>----</Text>
-                            <Text className="w-24" style={{ textAlign: 'right' }}>08h às 17h</Text>
-                        </View>
-                        <View className="flex flex-row justify-between">
-                            <Text className="w-12">Qua.</Text>
-                            <Text>----</Text>
-                            <Text className="w-24" style={{ textAlign: 'right' }}>08h às 17h</Text>
-                        </View>
-                        <View className="flex flex-row justify-between">
-                            <Text className="w-12">Qui.</Text>
-                            <Text>----</Text>
-                            <Text className="w-24" style={{ textAlign: 'right' }}>08h às 17h</Text>
-                        </View>
-                        <View className="flex flex-row justify-between">
-                            <Text className="w-12">Sex.</Text>
-                            <Text>----</Text>
-                            <Text className="w-24" style={{ textAlign: 'right' }}>08h às 16h</Text>
-                        </View>
-                        <View className="flex flex-row justify-between">
-                            <Text className="w-12">Sáb.</Text>
-                            <Text>----</Text>
-                            <Text className="w-24" style={{ textAlign: 'right' }}>08h às 12h</Text>
-                        </View>
                     </View>
                 </View>
                 <TouchableOpacity onPress={() => setHorarios(true)} className="flex items-center justify-center bg-blue-600 p-2 rounded">

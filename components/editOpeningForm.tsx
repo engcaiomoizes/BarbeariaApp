@@ -1,3 +1,5 @@
+import { openingUpdate } from "@/services/openingUpdate";
+import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -61,6 +63,7 @@ export default function EditOpeningForm({ horario, onClose }: Props) {
     const [showPicker, setShowPicker] = useState(false);
     const [currentTime, setCurrentTime] = useState(new Date());
     const [isEndTime, setIsEndTime] = useState(false);
+    const [pickerTitle, setPickerTitle] = useState("");
 
     const handleEditTime = (day: string, type: 'start' | 'end') => {
         setSelectedDay(day);
@@ -68,11 +71,17 @@ export default function EditOpeningForm({ horario, onClose }: Props) {
         const currentTime = horarios[day][type];
         const [hours, minutes] = currentTime ? currentTime.split(':') : ['00', '00'];
         setCurrentTime(new Date(2025, 0, 1, parseInt(hours), parseInt(minutes)));
+        setPickerTitle("Data Inicial");
         setShowPicker(true);
         setIsEndTime(false);
     };
 
-    const handleTimeChange = (event: any, selectedDate: Date | undefined) => {
+    const handleTimeChange = (event: DateTimePickerEvent, selectedDate: Date | undefined) => {
+        if (event.type === "dismissed") {
+            setShowPicker(false);
+            return;
+        }
+        
         const currentDate = selectedDate || currentTime;
         setShowPicker(false);
 
@@ -88,9 +97,17 @@ export default function EditOpeningForm({ horario, onClose }: Props) {
                 setIsEndTime(true);
                 setTimeType('end');
                 setCurrentTime(new Date(2025, 0, 1, parseInt(hours), parseInt(minutes)));
+                setPickerTitle("Data Final");
                 setShowPicker(true);
             }
         }
+    };
+
+    const handleCloseTime = (day: string) => {
+        const updatedHorarios = { ...horarios };
+        updatedHorarios[day]['start'] = null;
+        updatedHorarios[day]['end'] = null;
+        setHorarios(updatedHorarios);
     };
 
     const formatStringTime = (time: string | null) => {
@@ -104,6 +121,23 @@ export default function EditOpeningForm({ horario, onClose }: Props) {
         return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
     };
 
+    const handleSave = async () => {
+        try {
+            setLoading(true);
+            const base64Str = btoa(JSON.stringify(horarios));
+            await openingUpdate(base64Str);
+            onClose();
+            router.replace('/reload');
+            setTimeout(() => {
+                router.replace('/(tabs)/my-barber');
+            }, 10);
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <View className="absolute w-full h-full z-20">
             <View onTouchEnd={onClose} className="absolute w-full h-full bg-black/50"></View>
@@ -113,12 +147,27 @@ export default function EditOpeningForm({ horario, onClose }: Props) {
                         Object.keys(horarios).map((day) => (
                             <View key={day} className="flex flex-row justify-between items-center">
                                 <Text className="w-12">{capitalizeFirstLetter(day)}.</Text>
-                                <TouchableOpacity className="flex flex-row items-center justify-center bg-blue-600 p-2 rounded">
-                                    <Text className="text-white font-medium">Alterar</Text>
-                                </TouchableOpacity>
-                                <Text className="w-28" style={{ textAlign: 'right' }}>{horarios[day].start && horarios[day].end ? horarios[day].start + ' às ' + horarios[day].end : 'Fechado'}</Text>
+                                <View className="flex flex-col items-center gap-1">
+                                    <TouchableOpacity onPress={() => handleEditTime(day, 'start')} className="flex flex-row items-center justify-center bg-blue-600 p-2 rounded">
+                                        <Text className="text-white font-medium">Alterar</Text>
+                                    </TouchableOpacity>
+                                    <Text onPress={() => handleCloseTime(day)} className="text-sm underline text-red-600 font-bold">Fechar</Text>
+                                </View>
+                                <Text className="w-32" style={{ textAlign: 'right' }}>{horarios[day].start && horarios[day].end ? horarios[day].start + ' às ' + horarios[day].end : 'Fechado'}</Text>
                             </View>
                         ))
+                    }
+                    <View className="flex flex-row items-center gap-2">
+                        <TouchableOpacity onPress={handleSave} className="flex-1 flex-row items-center justify-center bg-blue-600 border border-blue-600 p-2 rounded">
+                            <Text className="text-white font-black">{ loading ? 'Carregando...' : 'Salvar' }</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={onClose} className="flex-1 flex-row items-center justify-center bg-white p-2 border border-red-600 rounded">
+                            <Text className="text-red-600 font-black">Cancelar</Text>
+                        </TouchableOpacity>
+                    </View>
+                    {
+                        showPicker &&
+                        <DateTimePicker mode="time" value={currentTime} is24Hour={true} design="material" title={pickerTitle} onChange={handleTimeChange} />
                     }
                 </View>
             </View>
