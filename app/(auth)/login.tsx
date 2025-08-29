@@ -69,6 +69,7 @@ export default function Login() {
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
+                  autoCapitalize="none"
                   style={{
                     backgroundColor: '#f3f4f6',
                     paddingHorizontal: 16,
@@ -99,6 +100,7 @@ export default function Login() {
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
+                  autoCapitalize="none"
                   style={{
                     backgroundColor: '#f3f4f6',
                     paddingHorizontal: 16,

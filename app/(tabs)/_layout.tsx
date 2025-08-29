@@ -5,6 +5,7 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { Redirect, Tabs } from "expo-router";
 import { useEffect, useState } from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function TabsLayout() {
   const { user, loading } = useAuth();
@@ -37,6 +38,7 @@ export default function TabsLayout() {
 
   const profileParams = data ? {
     userData: JSON.stringify({
+      id: data.uid,
       nome: data.nome,
       telefone: data.telefone,
       email: data.email,
@@ -54,6 +56,7 @@ export default function TabsLayout() {
   } : {};
 
   return (
+    <SafeAreaView className="flex-1">
     <Tabs
       screenOptions={{
         headerShown: true,
@@ -67,7 +70,7 @@ export default function TabsLayout() {
           tabBarIcon: ({ color, size }) => (
             <FontAwesome name="home" color={color} size={size} />
           ),
-          headerShown: true,
+          headerShown: false,
           headerTitle: "",
         }}
       />
@@ -78,7 +81,7 @@ export default function TabsLayout() {
           tabBarIcon: ({ color, size }) => (
             <FontAwesome name="user" color={color} size={size} />
           ),
-          headerShown: true,
+          headerShown: false,
           headerTitle: "",
         }}
         initialParams={profileParams}
@@ -90,11 +93,12 @@ export default function TabsLayout() {
           tabBarIcon: ({ color, size }) => (
             <FontAwesome6 name="shop" color={color} size={size} />
           ),
-          headerShown: true,
+          headerShown: false,
           headerTitle: "",
         }}
         initialParams={barberParams}
       />
     </Tabs>
+    </SafeAreaView>
   );
 }
