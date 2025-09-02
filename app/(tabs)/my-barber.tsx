@@ -11,6 +11,13 @@ interface BarberData {
     endereco: string;
     telefone: string;
     horario: string;
+    services: Service[];
+}
+
+interface Service {
+    key: string;
+    title: string;
+    price: number;
 }
 
 interface Horario {
@@ -126,35 +133,10 @@ export default function MyBarber() {
                         </View>
                     </View>
                 </View>
-                <View className="flex flex-col gap-2 p-2 rounded bg-white">
-                    <View className="flex flex-row items-center justify-center gap-2">
-                        <FontAwesome name="history" size={18} />
-                        <Text className="text-justify font-black">Agendamentos do dia:</Text>
-                    </View>
-                    <View className="flex flex-col gap-1 px-2">
-                        <View className="flex flex-row items-center justify-between">
-                            <View className="flex flex-col">
-                                <Text className="font-bold">Caio Moizés Santos</Text>
-                                <Text className="text-sm">(18) 98819-6113</Text>
-                            </View>
-                            <Text className="font-bold">14h</Text>
-                        </View>
-                        <View className="flex flex-row items-center justify-between">
-                            <View className="flex flex-col">
-                                <Text className="font-bold">Caio Moizés Santos</Text>
-                                <Text className="text-sm">(18) 98819-6113</Text>
-                            </View>
-                            <Text className="font-bold">16h</Text>
-                        </View>
-                        <View className="flex flex-row items-center justify-between">
-                            <View className="flex flex-col">
-                                <Text className="font-bold">Caio Moizés Santos</Text>
-                                <Text className="text-sm">(18) 98819-6113</Text>
-                            </View>
-                            <Text className="font-bold">16h30</Text>
-                        </View>
-                    </View>
-                </View>
+                <TouchableOpacity className="flex flex-row items-center justify-center bg-blue-600 p-2 rounded gap-2">
+                    <FontAwesome name="gear" size={18} style={{ color: 'white' }} />
+                    <Text className="text-white font-black">Serviços</Text>
+                </TouchableOpacity>
             </View>
         </ScrollView>
     );

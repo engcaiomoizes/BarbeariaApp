@@ -1,9 +1,19 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 
+interface Service {
+    key: string;
+    title: string;
+    price: number;
+}
+
 export default function Home() {
+    const router = useRouter();
+    const { homeData } = useLocalSearchParams();
+
     return (
         <View className="flex-1 px-8 py-2 gap-4 items-center">
             <Image style={{ width: 150, height: 100 }} source={require('../../assets/images/logo.png')} />
@@ -19,7 +29,7 @@ export default function Home() {
                     <Text className="font-bold text-red-600 underline text-sm">Cancelar</Text>
                 </TouchableOpacity>
             </View>
-            <TouchableOpacity className="flex flex-row items-center justify-center gap-2 bg-blue-600 w-full p-2 rounded">
+            <TouchableOpacity onPress={() => router.push({pathname: '/(user)/schedule', params: {homeData}})} className="flex flex-row items-center justify-center gap-2 bg-blue-600 w-full p-2 rounded">
                 <FontAwesome name="plus" size={24} color="white" />
                 <Text className="font-bold text-white">Novo Agendamento</Text>
             </TouchableOpacity>

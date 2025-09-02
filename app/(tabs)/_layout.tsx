@@ -36,6 +36,14 @@ export default function TabsLayout() {
     return <Redirect href="/(auth)/login" />;
   }
 
+  const homeParams = data && barber ? {
+    homeData: JSON.stringify({
+      userId: data.uid,
+      services: barber.services,
+      horario: barber.horario,
+    })
+  } : {};
+
   const profileParams = data ? {
     userData: JSON.stringify({
       id: data.uid,
@@ -52,6 +60,7 @@ export default function TabsLayout() {
       endereco: barber.endereco,
       telefone: barber.telefone,
       horario: barber.horario,
+      services: barber.services,
     }),
   } : {};
 
@@ -73,6 +82,7 @@ export default function TabsLayout() {
           headerShown: false,
           headerTitle: "",
         }}
+        initialParams={homeParams}
       />
       <Tabs.Screen
         name="profile"
