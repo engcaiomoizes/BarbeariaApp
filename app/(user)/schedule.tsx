@@ -1,10 +1,10 @@
-import { getDayOfWeek, getDayText, getHorarios } from "@/lib/utils";
+import { getDayOfWeek, getDayText, getEndTime, getHorarios } from "@/lib/utils";
 import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 import { Picker } from "@react-native-picker/picker";
 import Checkbox from "expo-checkbox";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 interface Check {
     [key: string]: boolean;
@@ -20,6 +20,7 @@ interface Service {
     key: string;
     title: string;
     price: number;
+    gap: number;
 }
 
 interface Horario {
@@ -47,6 +48,8 @@ export default function Schedule() {
                 acc[service.key] = false;
                 return acc;
             }, {});
+
+            setIsChecked(initialCheckedState);
 
             const horarioString = atob(parsedData.horario);
             setHorarioList(JSON.parse(horarioString));
@@ -84,12 +87,14 @@ export default function Schedule() {
     }, [selectedDate]);
 
     useEffect(() => {
-        if (data) {
+        if (data && horarioList[getDayText(dayOfWeek)].start != null && horarioList[getDayText(dayOfWeek)].end != null) {
             const listaHorarios = getHorarios(horarioList[getDayText(dayOfWeek)].start, horarioList[getDayText(dayOfWeek)].end, 30);
             setHorarios(listaHorarios);
             setSelectedTime(listaHorarios[0]);
+        } else {
+            Alert.alert("A barbearia não abre nesta data.");
         }
-    }, [horarioList, data]);
+    }, [horarioList, data, dayOfWeek]);
 
     const handleSubmit = async () => {
         if (!data || selectedTime === "") return;
@@ -97,6 +102,32 @@ export default function Schedule() {
         console.log("Date: ", selectedDate.toLocaleDateString());
         console.log("Time: ", selectedTime);
         console.log("Observações: ", observacoes);
+
+        let price = 0;
+        let gap = 0;
+        
+        const services = data.services.reduce((acc: Check, service: Service) => {
+            // Verifica se isChecked foi definido, e em seguida atribui os valores de isChecked
+            if (!isChecked) return acc;
+            acc[service.key] = isChecked[service.key];
+            if (isChecked[service.key] === true) {
+                price += service.price;
+                gap += service.gap;
+            }
+
+            return acc;
+        }, {});
+
+        console.log("Preço: ", price);
+        console.log("Tempo: ", gap);
+        console.log("Hora Final: ", getEndTime(selectedDate.toLocaleDateString(), gap));
+
+        const todosFalse = Object.values(services).every(value => value === false);
+
+        if (todosFalse) {
+            Alert.alert("Selecione pelo menos 1 (um) Serviço.");
+            return;
+        }
         // try {
         //     setLoading(true);
         //     await createAgendamento(

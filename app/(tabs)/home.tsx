@@ -4,12 +4,6 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 
-interface Service {
-    key: string;
-    title: string;
-    price: number;
-}
-
 export default function Home() {
     const router = useRouter();
     const { homeData } = useLocalSearchParams();

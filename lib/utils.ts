@@ -47,3 +47,21 @@ export function getHorarios(start: string, end: string, gap: number): string[] {
 
     return horarios;
 }
+
+export function getEndTime(start: string, gap: number): string {
+    // Desestruturar o horário inicial (HH:MM)
+    const [hour, minute] = start.split(':').map(Number);
+
+    // Calcular os minutos totais a partir do horário inicial
+    const minutosTotais = hour * 60 + minute;
+
+    // Somar o gap de minutos
+    const minutosFinais = minutosTotais + gap;
+
+    // Calcular o novo horário final
+    const horaFinal = Math.floor(minutosFinais / 60) % 24; // Garantir que a hora não ultrapasse 24
+    const minutoFinal = minutosFinais % 60;
+
+    // Retornar o horário final formatado (HH:MM)
+    return `${horaFinal.toString().padStart(2, '0')}:${minutoFinal.toString().padStart(2, '0')}`;
+}

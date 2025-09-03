@@ -24,9 +24,16 @@ Aplicativo de agendamento para barbearia, desenvolvido com **React Native + Expo
 
 ## ✅ Funcionalidades (em desenvolvimento)
 
-- [x] Tela de login com e-mail/senha e Google
-- [x] Tela de splash
-- [ ] Tela de cadastro de usuário
+- [x] Tela de login de usuário
+- [x] Tela de cadastro de usuário
+- [x] Estrutura de Tabs
+- [x] Tela de Perfil do usuário
+- [x] Tela de Minha Barbearia
+- [x] Formulário de edição do usuário
+- [x] Formulário de edição da Barbearia
+- [x] Formulário de alteração de horário de funcionamento
+- [ ] Tela de cadastro de Serviços
+- [ ] Tela de splash
 - [ ] Agendamento de horários
 - [ ] Cancelamento de agendamentos
 - [ ] Painel do administrador (mobile)
